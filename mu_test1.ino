@@ -50,7 +50,7 @@ void loop(){
 
   // Check if the distance value is 200 four times
   static int counter = 0;
-  if (distance == 200) {
+  if (distance <= 240) {
     counter++;
     if (counter == 4) {
       switchMotorDirection();
