@@ -1,3 +1,7 @@
+//Must include beginning and setup in final code
+//obtains pH and stores it in pH variable
+
+
 #define SensorPin 0          // the pH meter Analog output is connected with the Arduino’s Analog
 unsigned long int avgValue;  //Store the average value of the sensor feedback
 float b, pH;
@@ -6,15 +10,10 @@ int buf[10],temp;
 void setup()
 {
   pinMode(13,OUTPUT);  
-  Serial.begin(9600);  
-  Serial.println("Ready");    //Test the serial monitor
 }
 void loop()
 {
   pH = obtainpH();
-  Serial.print("    pH:");  
-  Serial.print(pH,2);
-  Serial.println(" ");
 }
 
 float obtainpH(){
