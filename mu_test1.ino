@@ -32,7 +32,17 @@ pinMode(in4, OUTPUT);
 }
 
 void loop(){
-delay(MEASURE_DELAY);
+  // Turn on motor A
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  analogWrite(enA, 200); // Set speed to 200 out of possible range 0~255
+  // Turn on motor B
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW); 
+  analogWrite(enB, 200); // Set speed to 200 out of possible range 0~255
+  
+  
+  delay(MEASURE_DELAY);
   long distance = measure();
   Serial.print("Distance: ");
   Serial.print(distance + 22);
@@ -55,12 +65,15 @@ delay(MEASURE_DELAY);
 }
 
 void switchMotorDirection() {
-  digitalWrite(in1, !digitalRead(in1)); // Toggle motor A direction
-  digitalWrite(in2, !digitalRead(in2));
-  digitalWrite(in3, !digitalRead(in3)); // Toggle motor B direction
-  digitalWrite(in4, !digitalRead(in4));
-  analogWrite(enA, 255 - analogRead(enA)); // Toggle motor A PWM value
-  analogWrite(enB, 255 - analogRead(enB)); // Toggle motor B PWM value
+  // Turn on motor A in opposite direction
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  analogWrite(enA, 200); // Set speed to 200 out of possible range 0~255
+  // Turn on motor B in opposite direction
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH); 
+  analogWrite(enB, 200); // Set speed to 200 out of possible range 0~255
+  delay(4000);
 }
 
 long measure(){
