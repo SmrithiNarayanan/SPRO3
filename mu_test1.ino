@@ -50,7 +50,7 @@ void loop(){
 
   // Check if the distance value is 200 four times
   static int counter = 0;
-  if (distance <= 240) {
+  if (distance <=240) {
     counter++;
     if (counter == 4) {
       switchMotorDirection();
@@ -93,4 +93,3 @@ digitalWrite(TRIGGER_PIN, LOW); // Wait for the echo ...
 duration = pulseIn(ECHO_PIN, HIGH);
 return (long) (((float) duration / USONIC_DIV) * 10.0);
 }
-
