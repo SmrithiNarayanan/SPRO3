@@ -18,6 +18,7 @@ int in4 = 4;
 //flag variables
 int flag=0;
 
+
 void setup(){
 Serial.begin(9600); // Serial monitoring
 pinMode(TRIGGER_PIN, OUTPUT); // Initializing Trigger Output and Echo Input
@@ -35,75 +36,94 @@ pinMode(in4, OUTPUT);
 }
 
 void loop(){
+  if (flag==0) {
+    Movemotor(1, 1,0,200);
+    Serial.println("flag0");
+    
+    //delay(MEASURE_DELAY);
+    long distance = measure()+22;
 
-if (flag==0) {
-  // Turn on motor A
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  analogWrite(enA, 200); // Set speed to 200 out of possible range 0~255
-  // Turn on motor B
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW); 
-  analogWrite(enB, 200); // Set speed to 200 out of possible range 0~255
-  
-  
-  //delay(MEASURE_DELAY);
-  long distance = measure()+22;
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" mm");
 
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" mm");
-
-  // Check if the distance value is 200 four times
-  static int counter_0 = 0;
-  if (distance <= 300) {
-    counter_0++;
-    if (counter_0 == 4) {
-      flag=1;
+    // Check if the distance value is 200 four times
+    static int counter_0 = 0;
+    if (distance <= 300) {
+      counter_0++;
+      if (counter_0 == 4) {
+        flag=1;
+        counter_0 = 0;
+        Serial.println("flag=1");
+      }
+    } else {
       counter_0 = 0;
-      Serial.println("flag=1");
     }
-  } else {
-    counter = 0;
+    delay(1000);
   }
-  delay(1000);
-}
-if (flag==1){
-// move motor forward small amount 
-//Turn 90 degrees
-static int counter_1 = 0;
-// check distance 4 times 
-for(i=0;i<5;i++){
-  //Start sensor detection again
-  long distance = measure()+22;
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" mm");
-  //increment counter 
-  if (distance > 300) {
-    counter_1++; 
-}
-}
-if(counter_1>=2){
-  //move forward a small amount (test)
-  //then turn 90 degrees again
-  flag = 0;
-}
-if(counter_1<2){
-  flag=2;
-}
+
+  if (flag==1){
+    Serial.println("flag1");
+    Movemotor(1, 1,1000,200); //change delay after testing
+    Movemotor(1, 0,2000,200); //change delay after testing 
+    static int counter_1 = 0;
+    // check distance 4 times 
+    for(int i=0;i<5;i++){
+      //Start sensor detection again
+      long distance = measure()+22;
+      Serial.print("Distance: ");
+      Serial.print(distance);
+      Serial.println(" mm");
+      //increment counter 
+      if (distance > 300) {
+        counter_1++; 
+    }
+  }
+  if(counter_1>=2){
+    Movemotor(1, 1,1000,200); //change delay after testing
+    Movemotor(1, 0,2000,200); //change delay after testing
+    flag = 0;
+  }
+  if(counter_1<2){
+    flag=2;
+    Serial.println("flag2");
+  }
+
+  }
 }
 
-void switchMotorDirection() {
-  // Turn on motor A in opposite direction
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
-  analogWrite(enA, 200); // Set speed to 200 out of possible range 0~255
-  // Turn on motor B in opposite direction
-  digitalWrite(in3, LOW);
-  digitalWrite(in4, HIGH); 
-  analogWrite(enB, 200); // Set speed to 200 out of possible range 0~255
-  delay(4000);
+
+void Movemotor(int motoradir, int motorbdir,int time,int speed) {
+  if (motoradir == 1){
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+  }
+
+  if (motoradir == 2){
+      digitalWrite(in1, HIGH);
+      digitalWrite(in2, LOW);
+    }
+  if (motoradir == 0){
+      digitalWrite(in1, LOW);
+      digitalWrite(in2, LOW);
+    }
+  if (motorbdir == 1){
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, HIGH);
+    }
+
+  if (motorbdir == 2){
+      digitalWrite(in3, HIGH);
+      digitalWrite(in4, LOW);
+    }
+  if (motorbdir == 0){
+      digitalWrite(in3, LOW);
+      digitalWrite(in4, LOW);
+    }
+  
+  analogWrite(enA, speed); 
+  analogWrite(enB, speed); 
+  delay(time);
 }
 
 long measure(){
