@@ -43,29 +43,37 @@ void loop(){
 int buttonState;
 
 if (flag==0) {
-  Movemotor(1,1,0,200);
-  
-  
-  //delay(MEASURE_DELAY);
-  long distance = measure()+22;
+  buttonState = LOW;
+  if (buttonState == LOW) {
+    Movemotor(1,1,0,200);
+    buttonState = digitalRead(buttonPin);
+    //delay(MEASURE_DELAY);
+    long distance = measure()+22;
 
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" mm");
-  Serial.println("flag0");
+    Serial.print("Distance: ");
+    Serial.print(distance);
+    Serial.println(" mm");
+    Serial.println("flag0");
 
-  // Check if the distance value is 200 four times
-  static int counter_0 = 0;
-  if (distance <= 400) {
-    counter_0++;
-    if (counter_0 == 3) {
-      flag=1;
+    // Check if the distance value is 400 three times
+    static int counter_0 = 0;
+    if (distance <= 400) {
+      counter_0++;
+      if (counter_0 == 3) {
+        flag=1;
+        counter_0 = 0;
+        Serial.println("flag=1");
+      }
+    } else {
       counter_0 = 0;
-      Serial.println("flag=1");
     }
-  } else {
-    counter_0 = 0;
+    if(buttonState == HIGH){
+      Serial.println("button pressed");
+      Movemotor(2,2,0,200); //go back
+      flag = 1;
+    }
   }
+  
   delay(1000);
 }
 
@@ -96,7 +104,10 @@ if (flag==1){
 }
 
 if(flag==2){
+  buttonState = LOW;
+  if (buttonState == LOW) {
   Movemotor(1, 1,0,200); 
+  buttonState = digitalRead(buttonPin);
   // check distance
   long distance = measure()+22;
   Serial.print("Distance: ");
@@ -122,6 +133,11 @@ if(flag==2){
     counter_0 = 0;
     Movemotor(1, 1,0,200); // keep moving forward as normal 
   }
+  }
+  if(buttonState == HIGH){
+      Serial.println("button pressed");
+      flag = 3;
+    }
   delay(1000);
   }
 
