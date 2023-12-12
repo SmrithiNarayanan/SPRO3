@@ -45,8 +45,6 @@ int buttonState;
 if (flag==0) {
   Movemotor(1,1,0,200);
   
-  
-  //delay(MEASURE_DELAY);
   long distance = measure()+22;
 
   Serial.print("Distance: ");
