@@ -66,7 +66,6 @@ void setup() {
 
 
 void loop(){
-  int buttonState;
   //if user selection 1
   mode1(); 
   // if user selection 2
@@ -178,6 +177,7 @@ void mode1(){
   Serial.println(TDS);
 }
 void mode2(){
+  int buttonState;
   if (flag==0) {
   buttonState = HIGH;
   if (buttonState == HIGH) {
