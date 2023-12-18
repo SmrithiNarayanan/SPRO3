@@ -1,6 +1,5 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
-String command = "";            	//Variable for storing received data
 
 #define TRIGGER_PIN 11
 #define ECHO_PIN 12
@@ -20,6 +19,8 @@ int in2 = 4;
 int enB = 5;
 int in3 = 6;
 int in4 = 7;
+
+String command = "";            	//Variable for storing received data
 
 // Flag variables
 int flag = 0;
