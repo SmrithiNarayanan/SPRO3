@@ -1,5 +1,6 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
+String command = "";            	//Variable for storing received data
 
 #define TRIGGER_PIN 11
 #define ECHO_PIN 12
@@ -7,7 +8,7 @@
 #define MEASURE_SAMPLE_DELAY 5
 #define MEASURE_SAMPLES 20
 #define MEASURE_DELAY 25
-#define SensorPin 1          // the pH meter Analog output is connected with the Arduino’s Analog
+#define SensorPin 0          // the pH meter Analog output is connected with the Arduino’s Analog
 #define ONE_WIRE_BUS 9 //TDS 
 
 // Motor A
@@ -43,6 +44,7 @@ DallasTemperature sensors(&oneWire);
 
 void setup() {
     Serial.begin(9600); // Serial monitoring
+    pinMode(13, OUTPUT);    	//Sets digital pin 13 as output pin
     pinMode(TRIGGER_PIN, OUTPUT); // Initializing Trigger Output and Echo Input
     pinMode(ECHO_PIN, INPUT);
     digitalWrite(TRIGGER_PIN, LOW); // Reset the trigger pin and wait a half a second
@@ -66,12 +68,19 @@ void setup() {
 
 
 void loop(){
-  //if user selection 1
-  mode1(); 
-  // if user selection 2
-  mode2(); 
-  // if user selection 3
-  mode3(); 
+    if(Serial.available() > 0)  // Send data only when you receive data:
+{
+command = Serial.readString();  	//Read the incoming data and store it into variable data
+if(command == "1"){        	//Checks whether value of data is equal to 1 
+ mode1();                   
+}
+if(command == "2"){        	//Checks whether value of data is equal to 2
+ mode2();   
+}
+if(command == "3"){        	//Checks whether value of data is equal to 3
+ mode3();                   
+}
+}
 }
 
 void Movemotor(int motoradir, int motorbdir,int time,int speed) {
@@ -148,10 +157,12 @@ float obtainpH(){
   avgValue+=buf[i];
   float phValue=(float)avgValue*5.0/1024/6; //convert the analog into millivolt
   phValue=3.5*phValue;                      //convert the millivolt into pH value
+  String stringphValue = String(phValue);
+  Serial.println(stringphValue);
   digitalWrite(13, HIGH);   	
   delay(800);
   digitalWrite(13, LOW);
-  return phValue;
+  //return phValue;
 }
 
 unsigned int readTdsQuick(float temp)
@@ -162,7 +173,7 @@ unsigned int readTdsQuick(float temp)
   tds = (133.42 * pow(ec, 3) - 255.86 * ec * ec + 857.39 * ec) * 0.5; // Convert voltage value to TDS value
   return tds;
 }
-void mode1(){
+void mode1(){            //mode 1 = ph and TDS
   pH = obtainpH();
   Serial.print("pH:");  
   Serial.println(pH,2);
@@ -173,10 +184,11 @@ void mode1(){
   float temp = sensors.getTempCByIndex(0);
   // Call the TDS function with the current temperature
   TDS = readTdsQuick(temp);
-  Serial.print("TDS: ");
-  Serial.println(TDS);
+  String stringTDSValue = String(TDS);
+  //Serial.print("TDS: ");
+  Serial.println(stringTDSValue);
 }
-void mode2(){
+void mode2(){            // mode 2 = clean mode
   int buttonState;
   if (flag==0) {
   buttonState = HIGH;
@@ -281,7 +293,7 @@ if(flag==2){
     Movemotor(0, 0,0,200);
   }
 }
-void mode3(){
+void mode3(){            //mode 3 = clean,ph,TDS
   mode1();
   mode2(); 
 }
