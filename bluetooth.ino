@@ -61,8 +61,6 @@ for(int i=2;i<8;i++)                      //take the average value of 6 center s
 float phValue=(float)avgValue*5.0/1024/6; //convert the analog into millivolt
 phValue=3.5*phValue;                      //convert the millivolt into pH value
 String stringValue = String(phValue);
-Serial.print("PH value and TDS are: ");
-Serial.println(stringValue);
 digitalWrite(13, HIGH);   
 delay(800);
 digitalWrite(13, LOW);
@@ -86,7 +84,8 @@ void mode1(){            //mode 1 = ph and TDS
   // Call the TDS function with the current temperature
   TDS = readTdsQuick(temp);
   String stringTDSValue = String(TDS);
-  //Serial.print("TDS: ");
-  Serial.println(stringTDSValue);
+  Serial.print("PH value and TDS are: ");
+  Serial.println(stringValue + stringTDSValue);
+  
 }
 
