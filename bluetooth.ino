@@ -72,7 +72,7 @@ unsigned int readTdsQuick(float temp)
   float tempCoefficient = 1.0 + 0.02 * (temp - 25.0);     // Temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0));
   ec = (rawEc / tempCoefficient) * ecCalibration;         // Temperature and calibration compensation
   tds = (133.42 * pow(ec, 3) - 255.86 * ec * ec + 857.39 * ec) * 0.5; // Convert voltage value to TDS value
-  //return tds;
+  return tds;
 }
 
 void mode1(){            //mode 1 = ph and TDS
