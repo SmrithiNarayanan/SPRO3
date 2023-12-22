@@ -33,11 +33,11 @@ int buf[10],temp;
 
 //TDS variables and config
 const byte tds_sensor = A4;
-float aref = 4.3;
-float ec = 0;
+float aref = 4.3; // reference voltage
+float ec = 0; // electrical conductivty 
 unsigned int tds = 0;
 unsigned int TDS = 0;
-float ecCalibration = 1;
+float ecCalibration = 1; // calibration factor 
 // Setup a oneWire instance to communicate with any OneWire device
 OneWire oneWire(ONE_WIRE_BUS);
 // Pass oneWire reference to DallasTemperature library
